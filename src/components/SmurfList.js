@@ -1,34 +1,35 @@
-import {connect} from 'react-redux';
-
 import React from 'react';
 import Smurf from './Smurf';
+import {connect} from 'react-redux';
 
  const SmurfList = (props)=> {
 
-    const{isLoading, smurfsList} = props;
+
 
     if (props.isLoading) {
         return <h1>Loading...</h1>;
     }
 
-    return(
-    <div className="listContainer">
-        {
-            smurfsList.map(smurf => <Smurf key={smurf.id} smurf={smurf}/>)
-        }
-        
+    if (props.error !=='') {
+        return <h1>Error: {props.error}</h1>;  // error message will appear in case when axios.get fails
+    }
+
+    return(<div className="listContainer">
+        {props.smurfs.map(item =>{
+            return (
+        <Smurf key={item.id} smurf={item}/>)})}
     </div>);
 }
 
-// industry standard state to prop function
-  const mapStateToProps = (state) => {
-    return{
+const mapStateToProps = (state) =>{
+    return {
         isLoading: state.isLoading,
-        smurfsList: state.smurfsList,
-    };
-};
+        smurfs:state.smurfs,
+        error:state.error
+    }
+}
 
-export default connect(mapStateToProps)( SmurfList);
+export default connect(mapStateToProps,{})(SmurfList);
 
 //Task List:
 //1. Connect the smurfs and loading state values to the SmurfList component.

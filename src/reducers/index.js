@@ -1,53 +1,53 @@
-import {
-    ADD_SMURF,
-    FETCH_SMURF_START,
-    FETCH_SMURF_SUCCESS,
-    FETCH_SMURF_ERROR,
-    ERROR_MESSAGE_SET,
-} from '../actions';
+import { FETCH_START, FETCH_SUCCESS, FETCH_FAILURE, ADD_SMURF, SET_ERROR_MESSAGE} from "../actions"
 
 
 export const initialState = {
-    smurfsList: [],
-    isLoading: false,
-    error: '',
-
+    smurfs:[],
+    isLoading:false,
+    error:'',
+    errorMessage:''
 }
-//sets axios call to state 
-const reducer = (state = initialState, action)=> {
-    switch (action.type) {
-        case ERROR_MESSAGE_SET: 
-        return{
-            ...state,
-            error: action.payload
-        }
-        case ADD_SMURF:
-            return {
-                ...state, 
-                smurfsList: [...state.smurfsList, action.payload],
-            }
-     
-        case FETCH_SMURF_START:
-            return {
+
+const reducer = (state=initialState, action)=>{
+    switch(action.type){
+        case FETCH_START:
+            return{
                 ...state,
                 isLoading:true,
+                error:''
             }
-        case FETCH_SMURF_SUCCESS:
-            return {
-                ...state,
-                smurfsList: action.payload,
-                isLoading: false,
-                error: '',
-            }
-            case FETCH_SMURF_ERROR:
-                return{
-                    ...state,
-                    isLoading: false,
-                    error: action.payload,
-                }
 
-        default: return state;
+        case FETCH_SUCCESS:
+            return{
+                ...state,
+                smurfs:action.payload,
+                error:'',
+                isLoading:false
+            }
+
+        case FETCH_FAILURE:
+            return{
+                ...state,
+                isLoading:false,
+                error:action.payload
+            }
+
+        case ADD_SMURF:
+            return{
+                ...state,
+                isLoading:false,
+                smurfs:[...state.smurfs, action.payload], //adding a new object to smurfs array
+                errorMessage:''
+            }
         
+        case SET_ERROR_MESSAGE:
+            return{
+                ...state,
+                errorMessage: action.payload 
+            }
+
+        default: 
+            return state
     }
 }
 
